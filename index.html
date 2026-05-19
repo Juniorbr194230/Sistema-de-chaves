@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Cadastro de Chaves</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-md z-10 relative">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-white text-indigo-600 p-2 rounded-lg">
+                    <i class="fas fa-key text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight">KeyManagerPro</h1>
+            </div>
+            <div class="text-sm font-medium bg-indigo-700 py-1 px-3 rounded-full border border-indigo-500">
+                <span id="total-keys-badge">0</span> itens cadastrados
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 overflow-hidden">
+        
+        <!-- Form Section -->
+        <section class="w-full lg:w-1/3 bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-full overflow-y-auto">
+            <div class="mb-6 border-b border-slate-100 pb-4">
+                <h2 class="text-lg font-semibold text-slate-800 flex items-center gap-2" id="form-title">
+                    <i class="fas fa-plus-circle text-indigo-500"></i> Novo Registro
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">Cadastre os detalhes do modelo ou placa.</p>
+            </div>
+
+            <form id="key-form" class="space-y-4 flex-1">
+                <input type="hidden" id="key-id">
+                
+                <div>
+                    <label for="brand" class="block text-sm font-medium text-slate-700 mb-1">Marca/Fabricante *</label>
+                    <input type="text" id="brand" required placeholder="Ex: Gold, Papaiz, Stam" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                </div>
+
+                <div>
+                    <label for="code" class="block text-sm font-medium text-slate-700 mb-1">Código / Referência *</label>
+                    <input type="text" id="code" required placeholder="Ex: GOL-01, PLACA-A" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors uppercase">
+                </div>
+
+                <div>
+                    <label for="type" class="block text-sm font-medium text-slate-700 mb-1">Tipo de Item *</label>
+                    <div class="relative">
+                        <select id="type" required class="w-full px-3 py-2 border border-slate-300 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white transition-colors">
+                            <option value="" disabled selected>Selecione um tipo...</option>
+                            <option value="Yale">Yale (Comum)</option>
+                            <option value="Tetra">Tetra</option>
+                            <option value="Pantográfica">Pantográfica (Automotiva)</option>
+                            <option value="Gorje">Gorje</option>
+                            <option value="Tubular">Tubular</option>
+                            <option value="Multiponto">Multiponto</option>
+                            <option value="Cadeado">Cadeado</option>
+                            <option value="Cofre">Cofre</option>
+                            <option value="Placa de Chave">Placa de Chave</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="stock" class="block text-sm font-medium text-slate-700 mb-1">Quantidade em Estoque</label>
+                    <input type="number" id="stock" min="0" value="0" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                </div>
+
+                <div>
+                    <label for="location" class="block text-sm font-medium text-slate-700 mb-1">Localização (Painel/Gaveta)</label>
+                    <input type="text" id="location" placeholder="Ex: Painel A, Gaveta 3" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                </div>
+
+                <div>
+                    <label for="notes" class="block text-sm font-medium text-slate-700 mb-1">Observações</label>
+                    <textarea id="notes" rows="3" placeholder="Detalhes adicionais, compatibilidade, etc." 
+                              class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none"></textarea>
+                </div>
+                
+                <div class="pt-4 flex gap-3 mt-auto">
+                    <button type="button" id="btn-cancel" class="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 font-medium transition-colors hidden">
+                        Cancelar
+                    </button>
+                    <button type="submit" id="btn-save" class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors shadow-sm flex justify-center items-center gap-2">
+                        <i class="fas fa-save"></i> Salvar Registro
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- List Section -->
+        <section class="w-full lg:w-2/3 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-full overflow-hidden">
+            <!-- Search and Filter Bar -->
+            <div class="p-4 border-b border-slate-100 bg-slate-50 flex flex-col sm:flex-row gap-3 items-center justify-between z-10">
+                <div class="relative w-full sm:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-slate-400"></i>
+                    </div>
+                    <input type="text" id="search-input" placeholder="Buscar por código ou marca..." 
+                           class="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                </div>
+                
+                <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 hide-scrollbar">
+                    <button class="filter-btn active px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-white whitespace-nowrap transition-colors" data-filter="all">Todos</button>
+                    <button class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap transition-colors" data-filter="Yale">Yale</button>
+                    <button class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap transition-colors" data-filter="Tetra">Tetra</button>
+                    <button class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap transition-colors" data-filter="Pantográfica">Pantográfica</button>
+                    <button class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 whitespace-nowrap transition-colors" data-filter="Placa de Chave">Placas</button>
+                </div>
+            </div>
+
+            <!-- Table/List Area -->
+            <div class="flex-1 overflow-auto bg-slate-50/50 p-4">
+                <div id="keys-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Cards will be rendered here by JS -->
+                </div>
+                
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden h-full flex flex-col items-center justify-center text-center p-8">
+                    <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-key text-3xl text-indigo-300"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-slate-800 mb-1">Nenhum registro encontrado</h3>
+                    <p class="text-slate-500 text-sm max-w-md">Não há itens cadastrados com os filtros atuais. Adicione um novo registro no painel ao lado.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for notifications/confirmations -->
+    <div id="modal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300" id="modal-content">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-12 h-12 rounded-full mb-4 mx-auto" id="modal-icon-container">
+                    <i class="fas fa-info text-xl" id="modal-icon"></i>
+                </div>
+                <h3 class="text-lg font-bold text-center text-slate-800 mb-2" id="modal-title">Mensagem</h3>
+                <div class="text-slate-600 text-center text-sm mb-6" id="modal-message">Detalhes da mensagem aqui.</div>
+                
+                <div class="flex gap-3 justify-center" id="modal-actions">
+                    <!-- Buttons will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importações diretas dos links CDN do Firebase para funcionar no navegador sem precisar do "npm install"
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, addDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+
+        // =====================================================================
+        // CONFIGURAÇÃO DO FIREBASE (BANCO DE DADOS NA NUVEM)
+        // =====================================================================
+        let firebaseConfig = null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'key-manager-local';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Se estiver rodando no nosso ambiente de testes aqui, ele pega a chave automática
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+        } else {
+            // ======== CONFIGURAÇÃO PARA O SEU GITHUB/SUBLIME ========
+            // Aqui estão as suas credenciais oficiais do projeto "sistema-de-chaves-97df2"
+            firebaseConfig = {
+                apiKey: "AIzaSyCXu21PqJqq6KcGjmwJEWB-AjeDNpxNCsM",
+                authDomain: "sistema-de-chaves-97df2.firebaseapp.com",
+                projectId: "sistema-de-chaves-97df2",
+                storageBucket: "sistema-de-chaves-97df2.firebasestorage.app",
+                messagingSenderId: "596318634028",
+                appId: "1:596318634028:web:9d34679dc8eee4730ad189",
+                measurementId: "G-LGZ61YRTLH"
+            };
+            // =====================================================================
+        }
+
+        // State Management
+        let keys = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let editModeId = null;
+
+        // DOM Elements
+        const form = document.getElementById('key-form');
+        const keysContainer = document.getElementById('keys-container');
+        const emptyState = document.getElementById('empty-state');
+        const totalKeysBadge = document.getElementById('total-keys-badge');
+        const searchInput = document.getElementById('search-input');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        // Form Inputs
+        const formTitle = document.getElementById('form-title');
+        const inputId = document.getElementById('key-id');
+        const inputBrand = document.getElementById('brand');
+        const inputCode = document.getElementById('code');
+        const inputType = document.getElementById('type');
+        const inputStock = document.getElementById('stock');
+        const inputLocation = document.getElementById('location');
+        const inputNotes = document.getElementById('notes');
+        const btnCancel = document.getElementById('btn-cancel');
+        const btnSave = document.getElementById('btn-save');
+
+        // Modal Elements
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalIconContainer = document.getElementById('modal-icon-container');
+        const modalIcon = document.getElementById('modal-icon');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalActions = document.getElementById('modal-actions');
+
+        let app, auth, db, userId, analytics;
+
+        async function initFirebase() {
+            if (firebaseConfig && Object.keys(firebaseConfig).length > 0) {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                // Inicializa o Analytics apenas se houver um measurementId (no seu caso, tem)
+                if (firebaseConfig.measurementId) {
+                    try {
+                        analytics = getAnalytics(app);
+                    } catch (e) {
+                        console.warn("Analytics não pôde ser inicializado:", e);
+                    }
+                }
+            }
+
+            if (!auth) {
+                console.warn("Sem configuração de Firebase. Rodando modo local (dados não serão salvos ao atualizar a página).");
+                init();
+                return;
+            }
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                userId = auth.currentUser.uid;
+                init(); 
+                setupFirestoreListener(); 
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                showNotification('Aviso', 'Funcionando localmente. Configure as chaves do Firebase para salvar na nuvem.', 'warning');
+                init(); 
+            }
+        }
+
+        function setupFirestoreListener() {
+            if (!userId || !db) return;
+            const keysRef = collection(db, 'artifacts', appId, 'users', userId, 'keys');
+            
+            onSnapshot(keysRef, (snapshot) => {
+                keys = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                keys.sort((a, b) => new Date(b.date) - new Date(a.date));
+                renderKeys();
+            }, (error) => {
+                console.error("Erro Firestore:", error);
+            });
+        }
+
+        function init() {
+            form.addEventListener('submit', handleFormSubmit);
+            btnCancel.addEventListener('click', resetForm);
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase();
+                renderKeys();
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-slate-800', 'text-white');
+                        b.classList.add('bg-white', 'text-slate-600');
+                    });
+                    e.target.classList.remove('bg-white', 'text-slate-600');
+                    e.target.classList.add('bg-slate-800', 'text-white');
+                    
+                    currentFilter = e.target.dataset.filter;
+                    renderKeys();
+                });
+            });
+
+            if (!db) {
+                loadMockData();
+                renderKeys();
+            }
+        }
+
+        function loadMockData() {
+            keys = [
+                { id: '1', brand: 'Papaiz', code: 'PAP-Y1', type: 'Yale', stock: 15, location: 'Painel A', notes: 'Mais vendida', date: new Date().toISOString(), borrowedBy: null },
+                { id: '2', brand: 'Genérica', code: 'PLACA-C', type: 'Placa de Chave', stock: 1, location: 'Quadro de Testes', notes: 'Para testes de alarme', date: new Date().toISOString(), borrowedBy: 'João', borrowedAt: new Date().toISOString() }
+            ];
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const keyData = {
+                brand: inputBrand.value.trim(),
+                code: inputCode.value.trim().toUpperCase(),
+                type: inputType.value,
+                stock: parseInt(inputStock.value) || 0,
+                location: inputLocation.value.trim(),
+                notes: inputNotes.value.trim(),
+                date: editModeId ? keys.find(k => k.id === editModeId).date : new Date().toISOString()
+            };
+
+            const btnOriginalHtml = btnSave.innerHTML;
+            btnSave.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Salvando...`;
+            btnSave.disabled = true;
+
+            try {
+                if (editModeId) {
+                    // Update
+                    const existingKey = keys.find(k => k.id === editModeId);
+                    if(existingKey) {
+                        keyData.borrowedBy = existingKey.borrowedBy || null;
+                        keyData.borrowedAt = existingKey.borrowedAt || null;
+                    }
+
+                    if (db && userId) {
+                        const docRef = doc(db, 'artifacts', appId, 'users', userId, 'keys', editModeId);
+                        await updateDoc(docRef, keyData);
+                        showNotification('Sucesso', 'Registro atualizado na nuvem!', 'success');
+                    } else {
+                        const index = keys.findIndex(k => k.id === editModeId);
+                        if (index !== -1) keys[index] = { id: editModeId, ...keyData };
+                        showNotification('Sucesso', 'Registro atualizado localmente!', 'success');
+                    }
+                } else {
+                    // Create
+                    keyData.borrowedBy = null;
+                    keyData.borrowedAt = null;
+
+                    if (keys.some(k => k.code === keyData.code)) {
+                        showNotification('Atenção', 'Já existe um registro com este código.', 'warning');
+                        btnSave.innerHTML = btnOriginalHtml;
+                        btnSave.disabled = false;
+                        return;
+                    }
+                    
+                    if (db && userId) {
+                        const keysRef = collection(db, 'artifacts', appId, 'users', userId, 'keys');
+                        await addDoc(keysRef, keyData);
+                        showNotification('Sucesso', 'Novo registro salvo na nuvem!', 'success');
+                    } else {
+                        keys.unshift({ id: generateId(), ...keyData });
+                        showNotification('Sucesso', 'Novo registro feito localmente!', 'success');
+                    }
+                }
+
+                resetForm();
+                if (!db) renderKeys(); 
+                keysContainer.parentElement.scrollTop = 0;
+            } catch (err) {
+                console.error(err);
+                showNotification('Erro', 'Falha ao salvar dados.', 'danger');
+            } finally {
+                btnSave.innerHTML = `<i class="fas fa-save"></i> Salvar Registro`;
+                btnSave.disabled = false;
+            }
+        }
+
+        function editKey(id) {
+            const key = keys.find(k => k.id === id);
+            if (!key) return;
+
+            editModeId = key.id;
+            inputId.value = key.id;
+            inputBrand.value = key.brand;
+            inputCode.value = key.code;
+            inputType.value = key.type;
+            inputStock.value = key.stock;
+            inputLocation.value = key.location;
+            inputNotes.value = key.notes;
+
+            formTitle.innerHTML = `<i class="fas fa-edit text-amber-500"></i> Editando: ${key.code}`;
+            btnSave.innerHTML = `<i class="fas fa-check"></i> Atualizar`;
+            btnSave.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+            btnSave.classList.add('bg-amber-500', 'hover:bg-amber-600');
+            btnCancel.classList.remove('hidden');
+
+            if (window.innerWidth < 1024) form.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteKeyRequest(id) {
+            const key = keys.find(k => k.id === id);
+            if (!key) return;
+
+            showModal({
+                type: 'danger',
+                title: 'Excluir Registro',
+                message: `Tem certeza que deseja excluir <strong>${key.code}</strong> (${key.brand})?<br>Esta ação não pode ser desfeita.`,
+                buttons: [
+                    { text: 'Cancelar', class: 'bg-slate-200 text-slate-800 hover:bg-slate-300', action: hideModal },
+                    { text: 'Excluir', class: 'bg-red-500 text-white hover:bg-red-600', action: () => executeDelete(id) }
+                ]
+            });
+        }
+
+        async function executeDelete(id) {
+            try {
+                if (db && userId) {
+                    const docRef = doc(db, 'artifacts', appId, 'users', userId, 'keys', id);
+                    await deleteDoc(docRef);
+                } else {
+                    keys = keys.filter(k => k.id !== id);
+                    renderKeys();
+                }
+                
+                hideModal();
+                if (editModeId === id) resetForm();
+                showNotification('Excluído', 'Registro removido com sucesso.', 'info');
+            } catch (err) {
+                console.error(err);
+                showNotification('Erro', 'Falha ao tentar excluir.', 'danger');
+            }
+        }
+
+        function resetForm() {
+            form.reset();
+            editModeId = null;
+            inputId.value = '';
+            
+            formTitle.innerHTML = `<i class="fas fa-plus-circle text-indigo-500"></i> Novo Registro`;
+            btnSave.innerHTML = `<i class="fas fa-save"></i> Salvar Registro`;
+            btnSave.classList.remove('bg-amber-500', 'hover:bg-amber-600');
+            btnSave.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            btnCancel.classList.add('hidden');
+        }
+
+        function getTypeIconAndColor(type) {
+            const map = {
+                'Yale': { icon: 'fa-key', color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-200' },
+                'Tetra': { icon: 'fa-plus', color: 'text-purple-500', bg: 'bg-purple-50', border: 'border-purple-200' },
+                'Pantográfica': { icon: 'fa-car', color: 'text-emerald-500', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+                'Gorje': { icon: 'fa-unlock-alt', color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-200' },
+                'Tubular': { icon: 'fa-circle-notch', color: 'text-cyan-500', bg: 'bg-cyan-50', border: 'border-cyan-200' },
+                'Multiponto': { icon: 'fa-braille', color: 'text-indigo-500', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+                'Cadeado': { icon: 'fa-lock', color: 'text-rose-500', bg: 'bg-rose-50', border: 'border-rose-200' },
+                'Cofre': { icon: 'fa-vault', color: 'text-slate-700', bg: 'bg-slate-100', border: 'border-slate-300' },
+                'Placa de Chave': { icon: 'fa-id-badge', color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-200' }
+            };
+            return map[type] || { icon: 'fa-key', color: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200' };
+        }
+
+        function formatarData(isoString) {
+            if (!isoString) return '';
+            const data = new Date(isoString);
+            return data.toLocaleDateString('pt-BR') + ' às ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function renderKeys() {
+            keysContainer.innerHTML = '';
+            let filteredKeys = keys;
+            
+            if (currentFilter !== 'all') {
+                filteredKeys = filteredKeys.filter(k => k.type === currentFilter);
+            }
+            
+            if (searchQuery) {
+                filteredKeys = filteredKeys.filter(k => 
+                    k.code.toLowerCase().includes(searchQuery) || 
+                    k.brand.toLowerCase().includes(searchQuery) ||
+                    k.type.toLowerCase().includes(searchQuery) ||
+                    (k.location && k.location.toLowerCase().includes(searchQuery)) ||
+                    (k.borrowedBy && k.borrowedBy.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            totalKeysBadge.textContent = filteredKeys.length;
+
+            if (filteredKeys.length === 0) {
+                keysContainer.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            keysContainer.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            filteredKeys.forEach(key => {
+                const style = getTypeIconAndColor(key.type);
+                const isBorrowed = !!key.borrowedBy;
+                
+                const stockStatus = key.stock <= 5 
+                    ? (key.stock === 0 ? '<span class="text-red-500 font-bold"><i class="fas fa-exclamation-triangle text-xs mr-1"></i>Esgotado</span>' : `<span class="text-amber-500 font-bold">Baixo (${key.stock})</span>`)
+                    : `<span class="text-emerald-600 font-medium">${key.stock} unds</span>`;
+
+                const card = document.createElement('div');
+                card.className = `bg-white border rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow fade-in flex flex-col h-full relative overflow-hidden group ${style.border}`;
+                
+                // HTML structure for the card
+                card.innerHTML = `
+                    <div class="absolute top-0 left-0 w-1 h-full ${style.bg.replace('50', '400')}"></div>
+                    
+                    <div class="flex justify-between items-start mb-3 pl-2">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full ${style.bg} flex items-center justify-center border ${style.border}">
+                                <i class="fas ${style.icon} ${style.color}"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-lg leading-tight tracking-tight">${key.code}</h3>
+                                <p class="text-xs text-slate-500 font-medium">${key.brand}</p>
+                            </div>
+                        </div>
+                        <div class="flex opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="editKey('${key.id}')" class="p-1.5 text-slate-400 hover:text-amber-500 transition-colors" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteKeyRequest('${key.id}')" class="p-1.5 text-slate-400 hover:text-red-500 transition-colors" title="Excluir">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-y-2 gap-x-4 mb-3 text-sm flex-1 pl-2">
+                        <div>
+                            <span class="block text-xs text-slate-400">Tipo</span>
+                            <span class="font-medium text-slate-700">${key.type}</span>
+                        </div>
+                        <div>
+                            <span class="block text-xs text-slate-400">Estoque</span>
+                            ${stockStatus}
+                        </div>
+                        <div class="col-span-2">
+                            <span class="block text-xs text-slate-400">Localização</span>
+                            <span class="font-medium text-slate-700 truncate block"><i class="fas fa-map-marker-alt text-xs text-slate-400 mr-1"></i> ${key.location || 'Não definida'}</span>
+                        </div>
+                    </div>
+                    
+                    ${isBorrowed ? `
+                        <div class="mt-2 mb-3 bg-orange-50 border border-orange-200 rounded-lg p-2 flex justify-between items-center pl-3">
+                            <div>
+                                <span class="block text-[10px] uppercase font-bold text-orange-600">Emprestado para:</span>
+                                <span class="font-medium text-slate-800 text-sm"><i class="fas fa-user-circle mr-1 text-orange-400"></i>${key.borrowedBy}</span>
+                                <span class="block text-[10px] text-slate-500">${formatarData(key.borrowedAt)}</span>
+                            </div>
+                            <button onclick="devolverChave('${key.id}')" class="px-2 py-1 bg-white text-orange-600 border border-orange-200 hover:bg-orange-100 text-xs font-bold rounded shadow-sm transition-colors">
+                                Devolver
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="mt-2 mb-3 pl-2">
+                            <button onclick="abrirModalEmprestimo('${key.id}')" class="text-xs font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors">
+                                <i class="fas fa-hand-holding"></i> Registrar Empréstimo
+                            </button>
+                        </div>
+                    `}
+
+                    ${key.notes ? `
+                    <div class="mt-auto pt-3 border-t border-slate-100 pl-2">
+                        <p class="text-xs text-slate-500 line-clamp-2 italic"><i class="fas fa-info-circle mr-1 opacity-50"></i>${key.notes}</p>
+                    </div>
+                    ` : ''}
+                `;
+                keysContainer.appendChild(card);
+            });
+        }
+
+        function abrirModalEmprestimo(id) {
+            showModal({
+                type: 'info',
+                title: 'Registrar Empréstimo',
+                message: `
+                    <p class="mb-3 text-left">Quem está pegando este item?</p>
+                    <input type="text" id="nome-emprestimo" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-800" placeholder="Digite o nome da pessoa">
+                `,
+                buttons: [
+                    { text: 'Cancelar', class: 'bg-slate-200 text-slate-800 hover:bg-slate-300', action: hideModal },
+                    { text: 'Confirmar', class: 'bg-indigo-600 text-white hover:bg-indigo-700', action: () => confirmarEmprestimo(id) }
+                ]
+            });
+            setTimeout(() => document.getElementById('nome-emprestimo')?.focus(), 100);
+        }
+
+        async function confirmarEmprestimo(id) {
+            const inputNome = document.getElementById('nome-emprestimo');
+            if (!inputNome || !inputNome.value.trim()) {
+                showNotification('Atenção', 'Digite o nome de quem está pegando.', 'warning');
+                return;
+            }
+
+            const nome = inputNome.value.trim();
+            const dataAtual = new Date().toISOString();
+
+            try {
+                if (db && userId) {
+                    const docRef = doc(db, 'artifacts', appId, 'users', userId, 'keys', id);
+                    await updateDoc(docRef, { borrowedBy: nome, borrowedAt: dataAtual });
+                } else {
+                    const index = keys.findIndex(k => k.id === id);
+                    if (index !== -1) {
+                        keys[index].borrowedBy = nome;
+                        keys[index].borrowedAt = dataAtual;
+                        renderKeys();
+                    }
+                }
+                hideModal();
+                showNotification('Sucesso', `Item emprestado para ${nome}.`, 'success');
+            } catch(err) {
+                console.error(err);
+                showNotification('Erro', 'Falha ao registrar empréstimo.', 'danger');
+            }
+        }
+
+        async function devolverChave(id) {
+            try {
+                if (db && userId) {
+                    const docRef = doc(db, 'artifacts', appId, 'users', userId, 'keys', id);
+                    await updateDoc(docRef, { borrowedBy: null, borrowedAt: null });
+                } else {
+                    const index = keys.findIndex(k => k.id === id);
+                    if (index !== -1) {
+                        keys[index].borrowedBy = null;
+                        keys[index].borrowedAt = null;
+                        renderKeys();
+                    }
+                }
+                showNotification('Devolvida', 'Item marcado como disponível novamente.', 'success');
+            } catch(err) {
+                console.error(err);
+                showNotification('Erro', 'Falha ao devolver item.', 'danger');
+            }
+        }
+
+        function showModal({ type, title, message, buttons }) {
+            let iconClass, iconBgClass, iconColorClass;
+            
+            switch(type) {
+                case 'danger':
+                    iconClass = 'fa-exclamation-triangle'; iconBgClass = 'bg-red-100'; iconColorClass = 'text-red-500'; break;
+                case 'success':
+                    iconClass = 'fa-check'; iconBgClass = 'bg-emerald-100'; iconColorClass = 'text-emerald-500'; break;
+                case 'warning':
+                    iconClass = 'fa-exclamation'; iconBgClass = 'bg-amber-100'; iconColorClass = 'text-amber-500'; break;
+                default: 
+                    iconClass = 'fa-info'; iconBgClass = 'bg-blue-100'; iconColorClass = 'text-blue-500';
+            }
+
+            modalIconContainer.className = `flex items-center justify-center w-12 h-12 rounded-full mb-4 mx-auto ${iconBgClass}`;
+            modalIcon.className = `fas ${iconClass} text-xl ${iconColorClass}`;
+            modalTitle.textContent = title;
+            modalMessage.innerHTML = message;
+            
+            modalActions.innerHTML = '';
+            buttons.forEach(btn => {
+                const buttonEl = document.createElement('button');
+                buttonEl.className = `px-4 py-2 rounded-lg font-medium transition-colors text-sm ${btn.class}`;
+                buttonEl.textContent = btn.text;
+                buttonEl.addEventListener('click', btn.action);
+                modalActions.appendChild(buttonEl);
+            });
+
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        function hideModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300); 
+        }
+
+        function showNotification(title, message, type = 'info') {
+            showModal({
+                type: type, title: title, message: message,
+                buttons: [{ text: 'OK', class: 'bg-slate-800 text-white hover:bg-slate-900 w-full', action: hideModal }]
+            });
+        }
+
+        function generateId() { return Math.random().toString(36).substr(2, 9) + Date.now().toString(36); }
+
+        window.editKey = editKey;
+        window.deleteKeyRequest = deleteKeyRequest;
+        window.abrirModalEmprestimo = abrirModalEmprestimo;
+        window.devolverChave = devolverChave;
+
+        // Inicia
+        initFirebase();
+    </script>
+</body>
+</html>
