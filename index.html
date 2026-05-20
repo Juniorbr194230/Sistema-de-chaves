@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KeyManagerPro</title>
 
   <style>
@@ -15,280 +15,82 @@
     }
 
     body{
-      background:#eef2ff;
-      color:#111827;
+      background:#f4f4f4;
+      padding:20px;
     }
 
-    /* TOPO */
-    .topbar{
-      width:100%;
-      background:#4f46e5;
-      color:white;
-      padding:18px 30px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    h1{
+      margin-bottom:20px;
+      color:#4f46e5;
     }
 
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-size:28px;
-      font-weight:bold;
-    }
-
-    .contador{
-      background:rgba(255,255,255,0.15);
-      padding:10px 18px;
-      border-radius:30px;
-      font-size:14px;
-    }
-
-    /* CONTAINER */
     .container{
       display:flex;
       gap:20px;
-      padding:20px;
-      height:calc(100vh - 90px);
     }
 
-    /* FORMULÁRIO */
     .formulario{
-      width:380px;
+      width:350px;
       background:white;
-      border-radius:18px;
-      padding:25px;
-      box-shadow:0 4px 15px rgba(0,0,0,0.08);
-      overflow-y:auto;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
     }
 
-    .formulario h2{
-      color:#111827;
-      margin-bottom:5px;
+    .formulario input,
+    .formulario select,
+    .formulario textarea{
+      width:100%;
+      padding:10px;
+      margin-top:5px;
+      margin-bottom:15px;
+      border:1px solid #ccc;
+      border-radius:6px;
     }
 
-    .subtitulo{
-      color:#6b7280;
-      font-size:14px;
-      margin-bottom:20px;
-    }
-
-    .linha{
-      margin-bottom:16px;
-    }
-
-    label{
-      display:block;
-      margin-bottom:6px;
-      font-size:14px;
-      font-weight:600;
-      color:#374151;
-    }
-
-    input,
-    select,
-    textarea{
+    .formulario button{
       width:100%;
       padding:12px;
-      border:1px solid #d1d5db;
-      border-radius:10px;
-      outline:none;
-      transition:0.2s;
-      font-size:14px;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus{
-      border-color:#4f46e5;
-      box-shadow:0 0 0 3px rgba(79,70,229,0.15);
-    }
-
-    textarea{
-      resize:none;
-      height:90px;
-    }
-
-    .preview{
-      width:100%;
-      height:180px;
-      border:2px dashed #c7d2fe;
-      border-radius:12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      background:#f9fafb;
-      margin-top:10px;
-    }
-
-    .preview img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .btn-salvar{
-      width:100%;
-      padding:14px;
       border:none;
       background:#4f46e5;
       color:white;
-      border-radius:12px;
+      border-radius:6px;
       cursor:pointer;
       font-size:16px;
-      font-weight:bold;
-      transition:0.2s;
-      margin-top:10px;
     }
 
-    .btn-salvar:hover{
-      background:#4338ca;
-    }
-
-    /* LISTA */
     .lista{
       flex:1;
       background:white;
-      border-radius:18px;
       padding:20px;
-      box-shadow:0 4px 15px rgba(0,0,0,0.08);
-      overflow-y:auto;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
     }
 
-    .top-lista{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:20px;
-      flex-wrap:wrap;
-      gap:15px;
-    }
-
-    .busca{
-      padding:12px;
-      border:1px solid #d1d5db;
-      border-radius:12px;
-      width:260px;
-    }
-
-    .filtros{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .filtro{
-      border:none;
-      padding:10px 16px;
-      border-radius:30px;
-      cursor:pointer;
-      background:#eef2ff;
-      color:#4f46e5;
-      font-weight:bold;
-    }
-
-    .filtro.ativo{
-      background:#111827;
-      color:white;
-    }
-
-    /* GRID */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:20px;
-    }
-
-    /* CARD */
     .card{
-      background:#fff;
-      border:1px solid #e5e7eb;
-      border-radius:16px;
-      overflow:hidden;
-      transition:0.2s;
-      box-shadow:0 2px 10px rgba(0,0,0,0.05);
+      border:1px solid #ddd;
+      padding:15px;
+      border-radius:8px;
+      margin-bottom:15px;
     }
 
-    .card:hover{
-      transform:translateY(-3px);
-    }
-
-    .card-img{
-      width:100%;
-      height:180px;
-      background:#f3f4f6;
-      overflow:hidden;
-    }
-
-    .card-img img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .card-body{
-      padding:16px;
-    }
-
-    .codigo{
+    .card h3{
       color:#4f46e5;
-      font-size:20px;
-      font-weight:bold;
-      margin-bottom:10px;
-    }
-
-    .info{
-      margin-bottom:6px;
-      font-size:14px;
-    }
-
-    .badge{
-      display:inline-block;
-      background:#eef2ff;
-      color:#4f46e5;
-      padding:6px 12px;
-      border-radius:30px;
-      font-size:12px;
-      font-weight:bold;
-      margin-bottom:10px;
     }
 
     .acoes{
-      margin-top:15px;
+      margin-top:10px;
       display:flex;
       gap:10px;
     }
 
     .btn-excluir{
-      flex:1;
-      padding:10px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
       background:#dc2626;
       color:white;
-      font-weight:bold;
-    }
-
-    .sem-imagem{
-      color:#9ca3af;
-      font-size:14px;
-    }
-
-    @media(max-width:900px){
-
-      .container{
-        flex-direction:column;
-        height:auto;
-      }
-
-      .formulario{
-        width:100%;
-      }
-
+      border:none;
+      padding:8px 12px;
+      border-radius:5px;
+      cursor:pointer;
     }
 
   </style>
@@ -297,89 +99,35 @@
 
 <body>
 
-  <!-- TOPO -->
-  <div class="topbar">
-
-    <div class="logo">
-      🔑 KeyManagerPro
-    </div>
-
-    <div class="contador">
-      <span id="contadorItens">0</span> itens cadastrados
-    </div>
-
-  </div>
+  <h1>🔑 KeyManagerPro</h1>
 
   <div class="container">
 
-    <!-- FORM -->
+    <!-- FORMULÁRIO -->
     <div class="formulario">
 
-      <h2>➕ Novo Registro</h2>
+      <h2>Novo Registro</h2>
 
-      <p class="subtitulo">
-        Cadastre modelos, placas e chaves.
-      </p>
+      <input type="text" id="marca" placeholder="Marca/Fabricante">
 
-      <div class="linha">
-        <label>Marca/Fabricante *</label>
-        <input type="text" id="marca" placeholder="Ex: Gold, Papaiz, Stam">
-      </div>
+      <input type="text" id="codigo" placeholder="Código / Referência">
 
-      <div class="linha">
-        <label>Código / Referência *</label>
-        <input type="text" id="codigo" placeholder="Ex: GOL-01">
-      </div>
+      <select id="tipo">
+        <option value="">Selecione o tipo</option>
+        <option value="Yale">Yale</option>
+        <option value="Tetra">Tetra</option>
+        <option value="Pantográfica">Pantográfica</option>
+        <option value="Placa">Placa</option>
+      </select>
 
-      <div class="linha">
-        <label>Tipo do Item *</label>
+      <input type="number" id="estoque" placeholder="Quantidade em estoque">
 
-        <select id="tipo">
-          <option value="">Selecione</option>
-          <option value="Yale">Yale</option>
-          <option value="Tetra">Tetra</option>
-          <option value="Pantográfica">Pantográfica</option>
-          <option value="Placa">Placa</option>
-        </select>
-      </div>
+      <input type="text" id="localizacao" placeholder="Localização">
 
-      <div class="linha">
-        <label>Quantidade em Estoque</label>
-        <input type="number" id="estoque" value="0">
-      </div>
+      <textarea id="observacoes" placeholder="Observações"></textarea>
 
-      <div class="linha">
-        <label>Localização</label>
-        <input type="text" id="localizacao" placeholder="Painel A / Gaveta 2">
-      </div>
-
-      <div class="linha">
-        <label>Observações</label>
-        <textarea id="observacoes"></textarea>
-      </div>
-
-      <!-- IMAGEM -->
-      <div class="linha">
-
-        <label>Imagem do Produto</label>
-
-        <input type="file"
-          id="imagem"
-          accept="image/*"
-          onchange="previewImagem(event)">
-
-        <div class="preview" id="preview">
-
-          <span class="sem-imagem">
-            Nenhuma imagem selecionada
-          </span>
-
-        </div>
-
-      </div>
-
-      <button class="btn-salvar" onclick="salvarMaterial()">
-        💾 Salvar Registro
+      <button onclick="salvarMaterial()">
+        Salvar Registro
       </button>
 
     </div>
@@ -387,28 +135,9 @@
     <!-- LISTA -->
     <div class="lista">
 
-      <div class="top-lista">
+      <h2>Materiais Cadastrados</h2>
 
-        <input
-          type="text"
-          class="busca"
-          id="busca"
-          placeholder="Buscar por código ou marca..."
-        >
-
-        <div class="filtros">
-
-          <button class="filtro ativo">Todos</button>
-          <button class="filtro">Yale</button>
-          <button class="filtro">Tetra</button>
-          <button class="filtro">Pantográfica</button>
-          <button class="filtro">Placas</button>
-
-        </div>
-
-      </div>
-
-      <div class="grid" id="listaMateriais"></div>
+      <div id="listaMateriais"></div>
 
     </div>
 
@@ -417,8 +146,8 @@
   <!-- FIREBASE -->
   <script type="module">
 
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    // Importações Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
     import {
       getFirestore,
@@ -428,64 +157,28 @@
       deleteDoc,
       doc,
       serverTimestamp
-    }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    import {
-      getStorage,
-      ref,
-      uploadBytes,
-      getDownloadURL
-    }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-    // FIREBASE CONFIG
+    // SUA CONFIGURAÇÃO FIREBASE
     const firebaseConfig = {
-
       apiKey: "AIzaSyCTObhr0vWz-0U7dELYoLBin--Z_JINPGM",
       authDomain: "keymanagerpro-f22f8.firebaseapp.com",
       projectId: "keymanagerpro-f22f8",
       storageBucket: "keymanagerpro-f22f8.firebasestorage.app",
       messagingSenderId: "1020249530436",
       appId: "1:1020249530436:web:88702962c8d35e86dddc11"
-
     };
 
-    // INIT
+    // Inicializa Firebase
     const app = initializeApp(firebaseConfig);
 
+    // Banco Firestore
     const db = getFirestore(app);
 
-    const storage = getStorage(app);
-
+    // REFERÊNCIA DA COLEÇÃO
     const materiaisRef = collection(db, "materiais");
 
-    // PREVIEW IMAGEM
-    window.previewImagem = function(event){
-
-      const preview = document.getElementById("preview");
-
-      const file = event.target.files[0];
-
-      if(file){
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-
-          preview.innerHTML = `
-            <img src="${e.target.result}">
-          `;
-
-        }
-
-        reader.readAsDataURL(file);
-
-      }
-
-    }
-
-    // SALVAR
+    // SALVAR MATERIAL
     window.salvarMaterial = async function(){
 
       const marca = document.getElementById("marca").value;
@@ -495,51 +188,29 @@
       const localizacao = document.getElementById("localizacao").value;
       const observacoes = document.getElementById("observacoes").value;
 
-      const imagemInput = document.getElementById("imagem");
-
+      // Validação simples
       if(!marca || !codigo || !tipo){
 
         alert("Preencha os campos obrigatórios");
 
         return;
-
       }
 
       try{
 
-        let imagemURL = "";
-
-        // UPLOAD IMAGEM
-        if(imagemInput.files[0]){
-
-          const file = imagemInput.files[0];
-
-          const storageRef = ref(
-            storage,
-            `produtos/${Date.now()}-${file.name}`
-          );
-
-          await uploadBytes(storageRef, file);
-
-          imagemURL = await getDownloadURL(storageRef);
-
-        }
-
-        // SALVAR FIRESTORE
         await addDoc(materiaisRef, {
 
-          marca,
-          codigo,
-          tipo,
-          estoque:Number(estoque),
-          localizacao,
-          observacoes,
-          imagemURL,
-          criadoEm:serverTimestamp()
+          marca: marca,
+          codigo: codigo,
+          tipo: tipo,
+          estoque: Number(estoque),
+          localizacao: localizacao,
+          observacoes: observacoes,
+          criadoEm: serverTimestamp()
 
         });
 
-        alert("Registro salvo!");
+        alert("Material salvo com sucesso!");
 
         limparFormulario();
 
@@ -547,40 +218,30 @@
 
         console.error(error);
 
-        alert("Erro ao salvar");
+        alert("Erro ao salvar material");
 
       }
 
     }
 
-    // LIMPAR
+    // LIMPAR FORMULÁRIO
     function limparFormulario(){
 
       document.getElementById("marca").value = "";
       document.getElementById("codigo").value = "";
       document.getElementById("tipo").value = "";
-      document.getElementById("estoque").value = 0;
+      document.getElementById("estoque").value = "";
       document.getElementById("localizacao").value = "";
       document.getElementById("observacoes").value = "";
-      document.getElementById("imagem").value = "";
-
-      document.getElementById("preview").innerHTML = `
-        <span class="sem-imagem">
-          Nenhuma imagem selecionada
-        </span>
-      `;
 
     }
 
-    // LISTAR
+    // LISTAR EM TEMPO REAL
     onSnapshot(materiaisRef, (snapshot) => {
 
       const lista = document.getElementById("listaMateriais");
 
       lista.innerHTML = "";
-
-      document.getElementById("contadorItens")
-        .innerText = snapshot.size;
 
       snapshot.forEach((docItem) => {
 
@@ -590,57 +251,26 @@
 
           <div class="card">
 
-            <div class="card-img">
+            <h3>${item.codigo}</h3>
 
-              ${
-                item.imagemURL
-                ? `<img src="${item.imagemURL}">`
-                : `<div class="preview">
-                    <span class="sem-imagem">
-                      Sem imagem
-                    </span>
-                  </div>`
-              }
+            <p><strong>Marca:</strong> ${item.marca}</p>
 
-            </div>
+            <p><strong>Tipo:</strong> ${item.tipo}</p>
 
-            <div class="card-body">
+            <p><strong>Estoque:</strong> ${item.estoque}</p>
 
-              <div class="badge">
-                ${item.tipo}
-              </div>
+            <p><strong>Localização:</strong> ${item.localizacao}</p>
 
-              <div class="codigo">
-                ${item.codigo}
-              </div>
+            <p><strong>Obs:</strong> ${item.observacoes}</p>
 
-              <div class="info">
-                <strong>Marca:</strong> ${item.marca}
-              </div>
+            <div class="acoes">
 
-              <div class="info">
-                <strong>Estoque:</strong> ${item.estoque}
-              </div>
+              <button class="btn-excluir"
+                onclick="excluirMaterial('${docItem.id}')">
 
-              <div class="info">
-                <strong>Local:</strong> ${item.localizacao || "-"}
-              </div>
+                Excluir
 
-              <div class="info">
-                <strong>Obs:</strong> ${item.observacoes || "-"}
-              </div>
-
-              <div class="acoes">
-
-                <button
-                  class="btn-excluir"
-                  onclick="excluirMaterial('${docItem.id}')">
-
-                  Excluir
-
-                </button>
-
-              </div>
+              </button>
 
             </div>
 
@@ -652,12 +282,10 @@
 
     });
 
-    // EXCLUIR
+    // EXCLUIR MATERIAL
     window.excluirMaterial = async function(id){
 
-      const confirmar = confirm(
-        "Deseja excluir este item?"
-      );
+      const confirmar = confirm("Deseja excluir este item?");
 
       if(!confirmar) return;
 
